@@ -1,9 +1,6 @@
 #include "main.h"
 #include "System.h"
 
-System::System() {}
-System::~System() {}
-
 bool System::Init() {
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0)
@@ -24,14 +21,8 @@ bool System::Init() {
 	if (!MainEvent)
 		return false;
 	
-	for (int i = 0; i < 5; i++)
-		Balls.push_back(new Ball);
-	
-	Balls[0]->Init(100, 640, 360);
-	Balls[1]->Init(30, 800, 500);
-	Balls[2]->Init(60, 120, 130);
-	Balls[3]->Init(70, 530, 480);
-	Balls[4]->Init(50, 340, 700);
+	Balls.push_back(new Ball(40, 340, 640, 100.0, -190.0));
+	Balls.push_back(new Ball(40, 1000, 570, -160.0, -180.0));
 
 	return true;
 }
@@ -54,13 +45,28 @@ bool System::Render() {
 
 		for (int i = 0; i < Balls.size(); i++)
 		{
-			Balls[i]->Draw(MainRenderer, time);
+			Balls[i]->Draw(MainRenderer, deltaTime);
 			Balls[i]->Update(deltaTime);
 		}
 
-		SDL_RenderPresent(MainRenderer);
+		if (VectorDistance(Balls[0]->GetPos(), Balls[1]->GetPos()) <= Balls[0]->GetRadius() + Balls[1]->GetRadius()) {
+			float theta = atan((Balls[0]->GetPos().y - Balls[1]->GetPos().y) / (Balls[0]->GetPos().x - Balls[1]->GetPos().x));
+			
+			// 힘은 200 N 이라고 가정된 코드
+			if (Balls[0]->GetPos().x > Balls[1]->GetPos().x) {
+				Balls[0]->xForce(200 * cos(theta));
+				Balls[0]->yForce(200 * sin(theta));
+				Balls[1]->xForce(-200 * cos(theta));
+				Balls[1]->yForce(-200 * sin(theta));
+			} else {
+				Balls[0]->xForce(-200 * cos(theta));
+				Balls[0]->yForce(-200 * sin(theta));
+				Balls[1]->xForce(200 * cos(theta));
+				Balls[1]->yForce(200 * sin(theta));
+			}
+		}
 
-		time += deltaTime;
+		SDL_RenderPresent(MainRenderer);
 	}
 
 	return true;

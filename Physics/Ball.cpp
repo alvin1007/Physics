@@ -1,33 +1,23 @@
 #include "main.h"
 #include "Ball.h"
 
-Ball::Ball() {}
-Ball::~Ball() {}
+void Ball::Draw(SDL_Renderer* renderer, float deltaTime) {
+	const int diameter = _radius * 2;
 
-bool Ball::Init(int r, int x, int y) {
-	radius = r;
-	posx = x;
-	posy = y;
-    return true;
-}
+	float x = (float)_radius - 1;
+	float y = 0;
+	float tx = 1;
+	float ty = 1;
+	float error = tx - diameter;
 
-void Ball::Draw(SDL_Renderer* renderer, float time) {
-	const int diameter = radius * 2;
-
-	int x = radius - 1;
-	int y = 0;
-	int tx = 1;
-	int ty = 1;
-	int error = tx - diameter;
-
-    int RealPosX = posx + (int)((1.0 / 2.0) * vx * time);
-    int RealPosY = posy + (int)((1.0 / 2.0) * vy * time);
+    _pos.x += ((float)(1.0 / 2.0) * _v.x * deltaTime);
+    _pos.y += ((float)(1.0 / 2.0) * _v.y * deltaTime);
 
 	while (x >= y) {
-        SDL_RenderDrawLine(renderer, RealPosX + x, RealPosY - y, RealPosX + x, RealPosY + y);
-        SDL_RenderDrawLine(renderer, RealPosX - x, RealPosY - y, RealPosX - x, RealPosY + y);
-        SDL_RenderDrawLine(renderer, RealPosX + y, RealPosY - x, RealPosX + y, RealPosY + x);
-        SDL_RenderDrawLine(renderer, RealPosX - y, RealPosY - x, RealPosX - y, RealPosY + x);
+        SDL_RenderDrawLineF(renderer, _pos.x + x, _pos.y - y, _pos.x + x, _pos.y + y);
+        SDL_RenderDrawLineF(renderer, _pos.x - x, _pos.y - y, _pos.x - x, _pos.y + y);
+        SDL_RenderDrawLineF(renderer, _pos.x + y, _pos.y - x, _pos.x + y, _pos.y + x);
+        SDL_RenderDrawLineF(renderer, _pos.x - y, _pos.y - x, _pos.x - y, _pos.y + x);
 
         if (error <= 0) {
             ++y;
@@ -42,6 +32,20 @@ void Ball::Draw(SDL_Renderer* renderer, float time) {
 }
 
 void Ball::Update(float deltaTime) {
-    vx += ax * deltaTime;
-    vy += ay * deltaTime;
+    _v.x += _a.x * deltaTime;
+    _v.y += _a.y * deltaTime;
+
+     if (_pos.x + _radius <= 2 * _radius || _pos.x + _radius >= 1280)
+        _v.x = -_v.x;
+
+     if (_pos.y - _radius <= 0 || _pos.y + _radius >= 720)
+         _v.y = -_v.y;
+}
+
+void Ball::xForce(float force) {
+    _v.x = 0.1 * force / _m + _v.x;
+}
+
+void Ball::yForce(float force) {
+    _v.y = 0.1 * force / _m + _v.y;
 }

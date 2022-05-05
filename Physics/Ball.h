@@ -1,23 +1,28 @@
 #ifndef BALLHEADER
 #define BALLHEADER
 
+#include "Vector.h"
+
 class Ball {
 public:
-	Ball();
-	~Ball();
-	bool Init(int r, int x , int y);
-	void Draw(SDL_Renderer*, float time);
+
+	Ball(int r, float x, float y, float vx, float vy) : _radius(r), _pos(x, y), _v(vx, vy) {}
+	~Ball() {};
+	
+	void Draw(SDL_Renderer*, float deltaTime);
 	void Update(float deltaTime);
+	void xForce(float force);
+	void yForce(float force);
+
+	int GetRadius() { return _radius; }
+	Vector GetPos() { return _pos; }
 private:
-	int radius = 0;
-	int posx = 0;
-	int posy = 0;
+	int _radius = 0;
 
-	float ax = 0;
-	float ay = 10;
+	Vector _pos, _v;
+	Vector _a = Vector(0, 50);
 
-	float vx = 50;
-	float vy = -200;
+	int _m = 1;
 };
 
 #endif
