@@ -11,8 +11,7 @@ public:
 	
 	void Draw(SDL_Renderer*, float deltaTime);
 	void Update(float deltaTime);
-	void xForce(float force);
-	void yForce(float force);
+	void Force(Vector* force);
 
 	int GetRadius() { return _radius; }
 	Vector GetPos() { return _pos; }

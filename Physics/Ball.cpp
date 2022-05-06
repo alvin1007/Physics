@@ -42,10 +42,7 @@ void Ball::Update(float deltaTime) {
          _v.y = -_v.y;
 }
 
-void Ball::xForce(float force) {
-    _v.x = 0.1 * force / _m + _v.x;
-}
-
-void Ball::yForce(float force) {
-    _v.y = 0.1 * force / _m + _v.y;
+void Ball::Force(Vector* force) {
+    _v.x = 0.1 * force->x / _m + _v.x;
+    _v.y = 0.1 * force->y / _m + _v.y;
 }

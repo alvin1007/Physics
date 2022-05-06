@@ -52,17 +52,15 @@ bool System::Render() {
 		if (VectorDistance(Balls[0]->GetPos(), Balls[1]->GetPos()) <= Balls[0]->GetRadius() + Balls[1]->GetRadius()) {
 			float theta = atan((Balls[0]->GetPos().y - Balls[1]->GetPos().y) / (Balls[0]->GetPos().x - Balls[1]->GetPos().x));
 			
-			// 힘은 200 N 이라고 가정된 코드
+			// 힘은 100 N 이라고 가정된 코드
+			const float FORCE = 1000;
+
 			if (Balls[0]->GetPos().x > Balls[1]->GetPos().x) {
-				Balls[0]->xForce(200 * cos(theta));
-				Balls[0]->yForce(200 * sin(theta));
-				Balls[1]->xForce(-200 * cos(theta));
-				Balls[1]->yForce(-200 * sin(theta));
+				Balls[0]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
+				Balls[1]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
 			} else {
-				Balls[0]->xForce(-200 * cos(theta));
-				Balls[0]->yForce(-200 * sin(theta));
-				Balls[1]->xForce(200 * cos(theta));
-				Balls[1]->yForce(200 * sin(theta));
+				Balls[0]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
+				Balls[1]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
 			}
 		}
 
