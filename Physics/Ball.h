@@ -15,6 +15,7 @@ public:
 
 	int GetRadius() { return _radius; }
 	Vector GetPos() { return _pos; }
+	Vector GetV() { return _v; }
 private:
 	int _radius = 0;
 

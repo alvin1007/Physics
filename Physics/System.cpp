@@ -6,7 +6,7 @@ bool System::Init() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0)
 		return false;
 
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2"))
 		return false;
 
 	MainWindow = SDL_CreateWindow("Physics", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_SHOWN);
@@ -20,9 +20,19 @@ bool System::Init() {
 	MainEvent = new SDL_Event;
 	if (!MainEvent)
 		return false;
+
+	// std::random_device rd;
+	// std::mt19937 gen(rd());
 	
-	Balls.push_back(new Ball(40, 340, 640, 100.0, -190.0));
-	Balls.push_back(new Ball(40, 1000, 570, -160.0, -180.0));
+	//std::uniform_int_distribution<int> dis1(20, 1220);
+	//std::uniform_int_distribution<int> dis2(680, 710);
+	//std::uniform_int_distribution<int> dis3(-1, 1);
+
+	//for (int i = 0; i < 900; i++)
+		//Balls.push_back(new Ball(5, dis1(gen), dis2(gen), dis3(gen), dis3(gen)));
+
+	Balls.push_back(new Ball(40, 200, 300, 150, -10));
+	Balls.push_back(new Ball(40, 1000, 300, -110, -100));
 
 	return true;
 }
@@ -49,18 +59,25 @@ bool System::Render() {
 			Balls[i]->Update(deltaTime);
 		}
 
-		if (VectorDistance(Balls[0]->GetPos(), Balls[1]->GetPos()) <= Balls[0]->GetRadius() + Balls[1]->GetRadius()) {
-			float theta = atan((Balls[0]->GetPos().y - Balls[1]->GetPos().y) / (Balls[0]->GetPos().x - Balls[1]->GetPos().x));
-			
-			// 힘은 100 N 이라고 가정된 코드
-			const float FORCE = 1000;
+		for (int i = 0; i < Balls.size(); i++)
+		{
+			for (int j = i + 1; j < Balls.size(); j++)
+			{
+				if (VectorDistance(Balls[i]->GetPos(), Balls[j]->GetPos()) <= Balls[i]->GetRadius() + Balls[j]->GetRadius()) {
+					float theta = atan((Balls[i]->GetPos().y - Balls[j]->GetPos().y) / (Balls[i]->GetPos().x - Balls[j]->GetPos().x));
 
-			if (Balls[0]->GetPos().x > Balls[1]->GetPos().x) {
-				Balls[0]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
-				Balls[1]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
-			} else {
-				Balls[0]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
-				Balls[1]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
+					const float FORCE = 100;
+
+					if (Balls[i]->GetPos().x > Balls[j]->GetPos().x) {
+						Balls[i]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
+						Balls[j]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
+					} else {
+						Balls[i]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
+						Balls[j]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
+					}
+
+					// std::cout << abs((Balls[0]->GetV() + Balls[1]->GetV()).x) + abs((Balls[0]->GetV() + Balls[1]->GetV()).y) << std::endl;
+				}
 			}
 		}
 

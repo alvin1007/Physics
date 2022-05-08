@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Physics", "Physics\Physics.vcxproj", "{7AB219EA-6058-4A3C-90A3-2E81A5797AD1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Learn", "Learn\Learn.vcxproj", "{634FE338-9470-4877-B712-42F113D2188B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{7AB219EA-6058-4A3C-90A3-2E81A5797AD1}.Release|x64.Build.0 = Release|x64
 		{7AB219EA-6058-4A3C-90A3-2E81A5797AD1}.Release|x86.ActiveCfg = Release|Win32
 		{7AB219EA-6058-4A3C-90A3-2E81A5797AD1}.Release|x86.Build.0 = Release|Win32
+		{634FE338-9470-4877-B712-42F113D2188B}.Debug|x64.ActiveCfg = Debug|x64
+		{634FE338-9470-4877-B712-42F113D2188B}.Debug|x64.Build.0 = Debug|x64
+		{634FE338-9470-4877-B712-42F113D2188B}.Debug|x86.ActiveCfg = Debug|Win32
+		{634FE338-9470-4877-B712-42F113D2188B}.Debug|x86.Build.0 = Debug|Win32
+		{634FE338-9470-4877-B712-42F113D2188B}.Release|x64.ActiveCfg = Release|x64
+		{634FE338-9470-4877-B712-42F113D2188B}.Release|x64.Build.0 = Release|x64
+		{634FE338-9470-4877-B712-42F113D2188B}.Release|x86.ActiveCfg = Release|Win32
+		{634FE338-9470-4877-B712-42F113D2188B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
