@@ -31,8 +31,18 @@ bool System::Init() {
 	//for (int i = 0; i < 900; i++)
 		//Balls.push_back(new Ball(5, dis1(gen), dis2(gen), dis3(gen), dis3(gen)));
 
-	Balls.push_back(new Ball(40, 200, 300, 150, -10));
-	Balls.push_back(new Ball(40, 1000, 300, -110, -100));
+#if (MOD == 1)
+	Balls.push_back(new Ball(40, 200, 600, 150, -10));
+	Balls.push_back(new Ball(40, 1000, 400, -10, -100));
+	Balls.push_back(new Ball(40, 600, 500, -50, -20));
+	Balls.push_back(new Ball(40, 800, 600, 70, -60));
+#elif (MOD == 2)
+	Balls.push_back(new Ball());
+#elif (MOD == 3)
+	Balls.push_back(new Ball());
+#elif (MOD == 4)
+	Balls.push_back(new Ball());
+#endif
 
 	return true;
 }
@@ -57,6 +67,9 @@ bool System::Render() {
 		{
 			Balls[i]->Draw(MainRenderer, deltaTime);
 			Balls[i]->Update(deltaTime);
+#ifdef DEBUG_MOD
+			Balls[i]->DrawVector(MainRenderer);
+#endif
 		}
 
 		for (int i = 0; i < Balls.size(); i++)
@@ -64,16 +77,18 @@ bool System::Render() {
 			for (int j = i + 1; j < Balls.size(); j++)
 			{
 				if (VectorDistance(Balls[i]->GetPos(), Balls[j]->GetPos()) <= Balls[i]->GetRadius() + Balls[j]->GetRadius()) {
-					float theta = atan((Balls[i]->GetPos().y - Balls[j]->GetPos().y) / (Balls[i]->GetPos().x - Balls[j]->GetPos().x));
+					const float theta = atan((Balls[i]->GetPos().y - Balls[j]->GetPos().y) / (Balls[i]->GetPos().x - Balls[j]->GetPos().x));
+					const float distance = VectorDistance(Balls[i]->GetPos(), Balls[j]->GetPos());
 
-					const float FORCE = 100;
-
+					const float FORCE1 = Balls[i]->GetK() * (Balls[i]->GetRadius() + Balls[j]->GetRadius() - distance);
+					const float FORCE2 = Balls[j]->GetK() * (Balls[i]->GetRadius() + Balls[j]->GetRadius() - distance);
+					    
 					if (Balls[i]->GetPos().x > Balls[j]->GetPos().x) {
-						Balls[i]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
-						Balls[j]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
+						Balls[i]->Force(new Vector(FORCE1 * cos(theta), FORCE1 * sin(theta)));
+						Balls[j]->Force(new Vector(-FORCE2 * cos(theta), -FORCE2 * sin(theta)));
 					} else {
-						Balls[i]->Force(new Vector(-FORCE * cos(theta), -FORCE * sin(theta)));
-						Balls[j]->Force(new Vector(FORCE * cos(theta), FORCE * sin(theta)));
+						Balls[i]->Force(new Vector(-FORCE1 * cos(theta), -FORCE1 * sin(theta)));
+						Balls[j]->Force(new Vector(FORCE2 * cos(theta), FORCE2 * sin(theta)));
 					}
 
 					// std::cout << abs((Balls[0]->GetV() + Balls[1]->GetV()).x) + abs((Balls[0]->GetV() + Balls[1]->GetV()).y) << std::endl;

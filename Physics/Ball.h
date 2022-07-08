@@ -10,10 +10,12 @@ public:
 	~Ball() {};
 	
 	void Draw(SDL_Renderer*, float deltaTime);
+	void DrawVector(SDL_Renderer*);
 	void Update(float deltaTime);
 	void Force(Vector* force);
 
 	int GetRadius() { return _radius; }
+	int GetK() { return _k; }
 	Vector GetPos() { return _pos; }
 	Vector GetV() { return _v; }
 private:
@@ -23,6 +25,7 @@ private:
 	Vector _a = Vector(0, 50);
 
 	int _m = 1;
+	int _k = 5;
 };
 
 #endif

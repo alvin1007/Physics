@@ -31,6 +31,21 @@ void Ball::Draw(SDL_Renderer* renderer, float deltaTime) {
 	}
 }
 
+void Ball::DrawVector(SDL_Renderer* randerer)
+{
+    SDL_SetRenderDrawColor(randerer, 0xFF, 0x00, 0x00, 0xFF);
+    SDL_RenderDrawLine(randerer, (int)GetPos().x, (int)GetPos().y, (int)GetPos().x + (int)GetV().x, (int)GetPos().y);
+    SDL_RenderDrawLine(randerer, (int)GetPos().x, (int)GetPos().y + 1, (int)GetPos().x + (int)GetV().x, (int)GetPos().y + 1);
+    SDL_RenderDrawLine(randerer, (int)GetPos().x, (int)GetPos().y - 1, (int)GetPos().x + (int)GetV().x, (int)GetPos().y - 1);
+
+    SDL_SetRenderDrawColor(randerer, 0x00, 0xFF, 0x00, 0xFF);
+    SDL_RenderDrawLine(randerer, (int)GetPos().x, (int)GetPos().y, (int)GetPos().x, (int)GetPos().y + (int)GetV().y);
+    SDL_RenderDrawLine(randerer, (int)GetPos().x + 1, (int)GetPos().y, (int)GetPos().x + 1, (int)GetPos().y + (int)GetV().y);
+    SDL_RenderDrawLine(randerer, (int)GetPos().x - 1, (int)GetPos().y, (int)GetPos().x - 1, (int)GetPos().y + (int)GetV().y);
+
+    SDL_SetRenderDrawColor(randerer, 0x00, 0x00, 0x00, 0xFF);
+}
+
 void Ball::Update(float deltaTime) {
     _v.x += _a.x * deltaTime;
     _v.y += _a.y * deltaTime;
@@ -43,6 +58,6 @@ void Ball::Update(float deltaTime) {
 }
 
 void Ball::Force(Vector* force) {
-    _v.x = 0.1 * force->x / _m + _v.x;
-    _v.y = 0.1 * force->y / _m + _v.y;
+    _v.x = 0.1f * force->x / _m + _v.x;
+    _v.y = 0.1f * force->y / _m + _v.y;
 }
